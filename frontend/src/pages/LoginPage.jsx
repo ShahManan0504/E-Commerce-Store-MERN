@@ -1,9 +1,9 @@
 import React, { Fragment } from "react";
 
-export default function index() {
+export default function LoginPage() {
   return (
     <Fragment>
-      <div>index</div>
+      <div>LoginPage</div>
     </Fragment>
   );
 }
