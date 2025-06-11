@@ -56,7 +56,7 @@ export const signup = async (req, res) => {
     setCookiesRefreshToken(res, refreshToken);
     setCookiesAccessToken(res, accessToken);
 
-    res.json({
+    res.status(200).json({
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -81,7 +81,7 @@ export const login = async (req, res) => {
 
       setCookiesRefreshToken(res, refreshToken);
       setCookiesAccessToken(res, accessToken);
-      res.json({
+      res.status(200).json({
         _id: user._id,
         name: user.name,
         email: user.email,
@@ -110,7 +110,7 @@ export const logout = async (req, res) => {
     }
     res.clearCookie("accessToken");
     res.clearCookie("refreshToken");
-    res.json({ message: "Logged out successfully" });
+    res.status(200).json({ message: "Logged out successfully" });
   } catch (error) {
     console.log("Error in logout controller", error.message);
     res.status(500).json({ message: "Server Error", error: error.message });
@@ -137,7 +137,7 @@ export const refreshToken = async (req, res) => {
       { expiresIn: "15m" }
     );
     setCookiesAccessToken(res, accessToken);
-    res.json({ message: "Token refreshed successfully" });
+    res.status(200).json({ message: "Token refreshed successfully" });
   } catch (error) {
     console.log("Error in refreshToken controller", error.message);
     res.status(500).json({ message: "Server Error", error: error.message });

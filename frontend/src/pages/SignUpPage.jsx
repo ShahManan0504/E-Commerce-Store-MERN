@@ -2,7 +2,7 @@ import { Fragment, useState } from "react";
 import { Link } from "react-router-dom";
 import { UserPlus, Mail, Lock, User, ArrowRight, Loader } from "lucide-react";
 import { motion } from "framer-motion";
-// import { useUserStore } from "../stores/useUserStore";
+import { useUserStore } from "../stores/useUserStore";
 
 export default function SignUpPage() {
   const [formData, setFormData] = useState({
@@ -12,18 +12,16 @@ export default function SignUpPage() {
     confirmPassword: "",
   });
 
-  //   const { signup, loading } = useUserStore();
+  const { signup, loading } = useUserStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // signup(formData);
+    signup(formData);
   };
 
   const handleChange = (fieldName, value) => {
     setFormData({ ...formData, [fieldName]: value });
   };
-
-  const loading = false;
 
   return (
     <Fragment>

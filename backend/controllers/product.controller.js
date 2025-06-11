@@ -5,7 +5,7 @@ import Product from "../models/product.model.js";
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find({}); // get all products from DB
-    res.json({ products });
+    res.status(200).json({ products });
   } catch (error) {
     console.log("Error form getAllProducts Controller", error.message);
     res.status(500).json({ message: "Server error", error: error.message });
@@ -16,7 +16,7 @@ export const getFeaturedProducts = async (req, res) => {
   try {
     let featuredProducts = await redis.get("feature_products");
     if (featuredProducts) {
-      return res.json(JSON.parse(featuredProducts));
+      return res.status(200).json(JSON.parse(featuredProducts));
     }
     //if not in redis then we have to fetch it from mongodb
     //.lean() is gonna return a plain js object instead of a mongodb document, which is good for performance
@@ -31,7 +31,7 @@ export const getFeaturedProducts = async (req, res) => {
 
     await redis.set("feature_product", JSON.stringify(featuredProducts));
 
-    res.json(featuredProducts);
+    res.status(200).json(featuredProducts);
   } catch (error) {
     console.log("Error in getFeaturedProducts Controller", error.message);
     res.status(500).json({ message: "Server Error", error: error.message });
@@ -54,7 +54,7 @@ export const createProduct = async (req, res) => {
       image: cloudinaryResponse.secure_url ? cloudinaryResponse.secure_url : "",
       category,
     });
-    res.status(201).json(product);
+    res.status(200).json(product);
   } catch (error) {
     console.log("Error in createProduct Controller", error.message);
     res.status(500).json({ message: "Server Error", error: error.message });
