@@ -18,12 +18,53 @@ export const useUserStore = create((set, get) => ({
       const res = await axios.post("/auth/signup", { name, email, password });
       if (res.status === 200) {
         toast.success("New User created");
-        set({ user: res.data.user });
+        set({ user: res.data });
       }
     } catch (error) {
       toast.error(error.response.data.message || "An error occurred");
     } finally {
       set({ loading: false });
+    }
+  },
+
+  login: async (email, password) => {
+    set({ loading: true });
+
+    try {
+      const res = await axios.post("/auth/login", { email, password });
+      if (res.status === 200) {
+        toast.success("Login Successful");
+        set({ user: res.data });
+      }
+    } catch (error) {
+      toast.error(error.response.data.message || "An error occurred");
+    } finally {
+      set({ loading: false });
+    }
+  },
+
+  logout: async () => {
+    try {
+      await axios.post("/auth/logout");
+      set({ user: null });
+    } catch (error) {
+      toast.error(error.response.data.message || "An error occurred");
+    }
+  },
+
+  checkAuth: async () => {
+    set({ checkingAuth: true });
+
+    try {
+      const res = await axios.get("/auth/profile");
+      if (res.status === 200) {
+        set({ user: res.data });
+      }
+    } catch (error) {
+      console.error("Error checking authentication:", error);
+      set({ user: null });
+    } finally {
+      set({ checkingAuth: false });
     }
   },
 }));

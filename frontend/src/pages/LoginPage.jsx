@@ -2,21 +2,20 @@ import { useState, Fragment } from "react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
 import { LogIn, Mail, Lock, ArrowRight, Loader } from "lucide-react";
-// import { useUserStore } from "../stores/useUserStore";
+import { useUserStore } from "../stores/useUserStore";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
-  // const { login, loading } = useUserStore();
+  const { login, loading } = useUserStore();
 
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(email, password);
-    // login(email, password);
+    login(email, password);
   };
 
-  const loading = false;
   return (
     <Fragment>
       <div className="flex flex-col justify-center py-12 sm:px-6 lg:px-8">
