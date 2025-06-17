@@ -19,7 +19,7 @@ export const createCheckoutSession = async (req, res) => {
 
       return {
         price_data: {
-          currency: "usd",
+          currency: "inr",
           product_data: {
             name: product.name,
             images: [product.image],
@@ -67,7 +67,7 @@ export const createCheckoutSession = async (req, res) => {
     });
 
     // if total amount is more than $200 then gift coupon for next order
-    if (totalAmount >= 20000) {
+    if (totalAmount >= 200000) {
       await createNewCoupon(req.user._id);
     }
 
@@ -109,14 +109,12 @@ export const checkoutSuccess = async (req, res) => {
 
       await newOrder.save();
 
-      res
-        .status(200)
-        .json({
-          success: true,
-          message:
-            "Payment successfully, order created, and coupon deactivated if used.",
-          orderId: newOrder._id,
-        });
+      res.status(200).json({
+        success: true,
+        message:
+          "Payment successfully, order created, and coupon deactivated if used.",
+        orderId: newOrder._id,
+      });
     }
   } catch (error) {
     console.log("Error in checkoutSuccess Controller", error.message);

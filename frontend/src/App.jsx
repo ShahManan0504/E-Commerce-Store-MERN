@@ -8,6 +8,8 @@ import { Toaster } from "react-hot-toast";
 import { useUserStore } from "./stores/useUserStore";
 import LoadingSpinner from "./components/LoadingSpinner";
 import AdminPage from "./pages/AdminPage";
+import "../src/style/common.css";
+import CategoryPage from "./pages/CategoryPage";
 
 function App() {
   const { user, checkAuth, checkingAuth } = useUserStore();
@@ -40,7 +42,7 @@ function App() {
               element={!user ? <LoginPage /> : <Navigate to="/" />}
             />
             <Route
-              path="/sercet-dashboard"
+              path="/secret-dashboard"
               element={
                 user && user?.role === "admin" ? (
                   <AdminPage />
@@ -48,6 +50,10 @@ function App() {
                   <Navigate to="/login" />
                 )
               }
+            />
+            <Route
+              path="/category/:category" // : this is used to dynamically set the route like in this case it is used for category name
+              element={<CategoryPage />}
             />
           </Routes>
         </div>
