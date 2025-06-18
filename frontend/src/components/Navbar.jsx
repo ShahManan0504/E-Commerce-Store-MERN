@@ -2,11 +2,12 @@ import React, { Fragment } from "react";
 import { ShoppingCart, UserPlus, LogIn, LogOut, Lock } from "lucide-react";
 import { Link } from "react-router-dom";
 import { useUserStore } from "../stores/useUserStore";
+import { useCartStore } from "../stores/useCartStore";
 
 export default function Navbar() {
   const { user, logout } = useUserStore();
+  const { cart } = useCartStore();
   const isAdmin = user?.role === "admin";
-  const cart = [{}, {}];
 
   return (
     <Fragment>
