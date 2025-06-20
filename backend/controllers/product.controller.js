@@ -92,7 +92,7 @@ export const getRecommendedProducts = async (req, res) => {
   try {
     //aggregate -> take input of query as array
     const products = await Product.aggregate([
-      { $sample: { size: 3 } }, // define the number of product we need
+      { $sample: { size: 4 } }, // define the number of product we need
       {
         $project: {
           _id: 1,
