@@ -2,6 +2,7 @@ import { stripe } from "../lib/stripe.js";
 import Coupon from "../models/coupon.model.js";
 import Order from "../models/order.model.js";
 
+// Create Stripe Checkout Session
 export const createCheckoutSession = async (req, res) => {
   try {
     const { products, couponCode } = req.body;
@@ -26,10 +27,11 @@ export const createCheckoutSession = async (req, res) => {
           },
           unit_amount: amount,
         },
+        quantity: product?.quantity || 1,
       };
     });
 
-    //checking for coupon
+    // Optional coupon logic
     let coupon = null;
     if (couponCode) {
       coupon = await Coupon.findOne({
@@ -37,6 +39,7 @@ export const createCheckoutSession = async (req, res) => {
         userId: req.user._id,
         isActive: true,
       });
+
       if (coupon) {
         totalAmount -= Math.round(
           (totalAmount * coupon.discountPercentage) / 100
@@ -48,7 +51,7 @@ export const createCheckoutSession = async (req, res) => {
       payment_method_types: ["card"],
       line_items: lineItems,
       mode: "payment",
-      success_url: `${process.env.CLIENT_URL}/purchase-success?session_id`,
+      success_url: `${process.env.CLIENT_URL}/purchase-success?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${process.env.CLIENT_URL}/purchase-cancel`,
       discounts: coupon
         ? [{ coupon: await createStripeCoupon(coupon.discountPercentage) }]
@@ -71,6 +74,7 @@ export const createCheckoutSession = async (req, res) => {
       await createNewCoupon(req.user._id);
     }
 
+    console.log("Created Stripe session:", session.id);
     res.status(200).json({ id: session.id, totalAmount: totalAmount / 100 });
   } catch (error) {
     console.log("Error in createCheckoutSession Controller", error.message);
@@ -78,6 +82,7 @@ export const createCheckoutSession = async (req, res) => {
   }
 };
 
+// Handle success after payment
 export const checkoutSuccess = async (req, res) => {
   try {
     const { sessionId } = req.body;
@@ -96,6 +101,7 @@ export const checkoutSuccess = async (req, res) => {
       }
       //create a new order
       const products = JSON.parse(session.metadata.products);
+
       const newOrder = new Order({
         user: session.metadata.userId,
         products: products.map((product) => ({
@@ -142,6 +148,5 @@ const createNewCoupon = async (userId) => {
   });
 
   await newCoupon.save();
-
   return newCoupon;
 };
