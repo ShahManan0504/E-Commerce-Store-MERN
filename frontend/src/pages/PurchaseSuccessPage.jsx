@@ -9,11 +9,12 @@ const PurchaseSuccessPage = () => {
   const [isProcessing, setIsProcessing] = useState(true);
   const { clearCart } = useCartStore();
   const [error, setError] = useState(null);
-  const hasRun = useRef(false);
+  const ranRef = useRef(false);
 
   useEffect(() => {
-    if (hasRun.current) return; // <- STOP if we've already run
-    hasRun.current = true;
+    debugger;
+    if (ranRef.current) return; // already ran → skip
+    ranRef.current = true;
 
     const sessionId = new URLSearchParams(window.location.search).get(
       "session_id"
