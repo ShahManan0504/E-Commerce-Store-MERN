@@ -1,7 +1,7 @@
 import { Fragment, useEffect } from "react";
 import CategoryItem from "../components/CategoryItem";
-// import { useProductStore } from "../stores/useProductStore";
-// import FeaturedProducts from "../components/FeaturedProducts";
+import { useProductStore } from "../stores/useProductStore";
+import FeaturedProducts from "../components/FeaturedProducts";
 
 const categories = [
   { href: "/jeans", name: "Jeans", imageUrl: "/jeans.jpg" },
@@ -14,11 +14,11 @@ const categories = [
 ];
 
 export default function HomePage() {
-  // const { fetchFeaturedProducts, products, isLoading } = useProductStore();
+  const { fetchFeaturedProducts, products, isLoading } = useProductStore();
 
-  // useEffect(() => {
-  //   fetchFeaturedProducts();
-  // }, [fetchFeaturedProducts]);
+  useEffect(() => {
+    fetchFeaturedProducts();
+  }, [fetchFeaturedProducts]);
 
   return (
     <Fragment>
@@ -37,9 +37,9 @@ export default function HomePage() {
             ))}
           </div>
 
-          {/* {!isLoading && products.length > 0 && (
+          {!isLoading && products.length > 0 && (
             <FeaturedProducts featuredProducts={products} />
-          )} */}
+          )}
         </div>
       </div>
     </Fragment>

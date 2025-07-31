@@ -1,3 +1,7 @@
 button {
-  cursor: pointer !important;
+  cursor: pointer;
+}
+
+.cursor-no-drop {
+  cursor: no-drop !important;
 }

@@ -16,10 +16,13 @@ router.get("/", protectRoute, adminRoute, async (req, res) => {
 
     const dailySalesData = await getDailySalesData(startDate, endDate);
 
-    res.status(200).json(analyticsData, dailySalesData);
+    res.status(200).json({
+      analyticsData,
+      dailySalesData,
+    });
   } catch (error) {
     console.log("Error in analytics route", error.message);
-    res.status(500).json({ message: "Server Error", error: error.message });
+    res.status(500).json({ message: "Server error", error: error.message });
   }
 });
 

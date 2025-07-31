@@ -1,5 +1,5 @@
 import { ArrowRight, CheckCircle, HandHeart } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 import { useCartStore } from "../stores/useCartStore";
 import axios from "../lib/axios";
@@ -9,12 +9,20 @@ const PurchaseSuccessPage = () => {
   const [isProcessing, setIsProcessing] = useState(true);
   const { clearCart } = useCartStore();
   const [error, setError] = useState(null);
-  const ranRef = useRef(false);
 
   useEffect(() => {
-    debugger;
-    if (ranRef.current) return; // already ran → skip
-    ranRef.current = true;
+    const handleCheckoutSuccess = async (sessionId) => {
+      try {
+        await axios.post("/payments/checkout-success", {
+          sessionId,
+        });
+        clearCart();
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsProcessing(false);
+      }
+    };
 
     const sessionId = new URLSearchParams(window.location.search).get(
       "session_id"
@@ -25,20 +33,7 @@ const PurchaseSuccessPage = () => {
       setIsProcessing(false);
       setError("No session ID found in the URL");
     }
-  }, []);
-
-  const handleCheckoutSuccess = async (sessionId) => {
-    try {
-      await axios.post("/payments/checkout-success", {
-        sessionId,
-      });
-      clearCart();
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsProcessing(false);
-    }
-  };
+  }, [clearCart]);
 
   if (isProcessing) return "Processing...";
 
@@ -49,9 +44,9 @@ const PurchaseSuccessPage = () => {
       <Confetti
         width={window.innerWidth}
         height={window.innerHeight}
-        gravity={0.1}
+        gravity={0.3}
         style={{ zIndex: 99 }}
-        numberOfPieces={700}
+        numberOfPieces={1000}
         recycle={false}
       />
 
